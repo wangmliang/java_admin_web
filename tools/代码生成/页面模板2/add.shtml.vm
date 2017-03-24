@@ -1,0 +1,147 @@
+#set($jquery="$")
+#set($_include = '#include')
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<!--$_include virtual="/root.jsp"  -->
+	<title>${entityName}</title>
+	<!--$_include virtual="/include.html"  -->
+</head>
+<body>
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<div class="page-header">
+			<h1>
+				${entityName}
+				<small> <i class="ace-icon fa fa-angle-double-right"></i>
+					新增/修改
+				</small>
+			</h1>
+		</div>
+		<form class="form-horizontal" role="form"  id="add-form" onsubmit="return false;">
+		<input type="hidden" name="${pkName}"  id="${pkName}"/>
+		<input type="hidden" name="updId"  id="updId"/>
+		<div class="row">
+			
+			<div class="col-xs-6">
+				
+					#foreach ($data in $fieldList)
+	 				#if ($data.bigfield != $pkName && $velocityCount % 2 == 0)
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="$data.bigfield">
+								#if (!$data.isnull)
+								<span class="red">*</span>
+								#end
+							${data.remark}:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="$data.bigfield" id="$data.bigfield" class="form-control input-sm" />
+							</div>
+						</div>
+						#end
+					#end
+					
+					
+				
+			</div>
+			<div class="col-xs-6">
+				
+					#foreach ($data in $fieldList)
+						#if ($data.bigfield != $pkName && $velocityCount % 2 == 1)
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="$data.bigfield">
+								#if (!$data.isnull)
+								<span class="red">*</span>
+								#end
+							${data.remark}:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="$data.bigfield" id="$data.bigfield" class="form-control input-sm" />
+							</div>
+						</div>
+						#end
+					#end
+					
+					
+				
+			</div>
+				
+			
+		</div>
+		<div class="clearfix form-actions">
+						<div class="center">
+							<button class="btn btn-info" type="submit" id="submitButton">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保 存
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="button" id="resetBtn">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重 置
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="button" onclick="javascript:history.back();">
+								<i class="ace-icon fa fa-arrow-left"></i>
+								返 回
+							</button>
+						</div>
+			  </div>
+			</form>
+		</div>
+	</div>
+
+
+	<!--$_include virtual="/include_footer.html"  -->
+
+	<script type="text/javascript">
+	var update_url   = ctxPaths+ '/${entityName}/add.ajax';
+	var view_url 	 = ctxPaths+ '/${entityName}/get.ajax';
+	var pkId = getP('${pkName}');
+	${jquery}(function(){
+		var add_validator = ${jquery}('#add-form').validate({
+					rules: {
+						#foreach ($data in $fieldList)
+	 					#if ($data.bigfield != $pkName)
+					'$data.bigfield' : {
+	 					#if (!${data.isnull})
+	 					required:true,
+	 					#end 
+	 					maxlength: $data.typelength
+					 }#if ($fieldList.size() != $velocityCount),#end
+	 				 #end		
+	 				#end
+					},
+					submitHandler: function (form) {
+						${jquery}.ajaxSubmit(update_url,${jquery}(form).serializeJson(),function(data){
+								if(data.success == true){
+								    Q_Alert('新增成功',function(){
+										location.href = ctxPaths+'/pages/${tableName}_list.shtml';
+									});
+								}else{
+									Q_Alert_Fail(data.message); 
+								}
+						},$('#submitButton'));
+						return false;		
+					}
+	    });	
+		${jquery}('#resetBtn').on('click',function(){
+			resetForm(${jquery}('#add-form'),add_validator);
+		});
+		if (pkId){
+			${jquery}('#updId').val(pkId);
+			${jquery}.ajaxSubmit(view_url, {'${pkName}':pkId}, function(rtn) {
+				if (rtn.success) {
+					${jquery}('#add-form').json2Form2(rtn.data);
+				} else {
+					Q_Alert_Fail(data.message); 
+				}
+			});
+		}
+	})
+	
+	
+	</script>
+</body>
+</html>

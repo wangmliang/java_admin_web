@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<staffExtendProperty>
+	<isStaffExtendPropertyOn>false</isStaffExtendPropertyOn>
+	<fieldSize>2</fieldSize>
+	<fields>
+		<field>
+			<type>input</type>
+			<id>directorName</id>
+			<name>directorName</name>
+			<label>主管姓名</label>
+			<value></value>
+			<check></check>
+		</field>
+		<field>
+			<type>input</type>
+			<id>directorMobile</id>
+			<name>directorMobile</name>
+			<label>主管手机号码</label>
+			<value></value>
+			<check></check>
+		</field>
+	</fields>
+</staffExtendProperty>

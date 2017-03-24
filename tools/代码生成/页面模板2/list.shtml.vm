@@ -1,0 +1,171 @@
+#set($jquery="$")
+#set($_include = '#include')
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<!--$_include virtual="/root.jsp"  -->
+	<title>${entityName}</title>
+	<!--$_include virtual="/include.html"  -->
+</head>
+<body>
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form id="queryForm" onsubmit="return false;">
+				<div class="widget-box">
+                        <div class="widget-header widget-header-flat search_tj_bar_tit">
+                            <h5 class="widget-title">查询条件</h5>
+                            <div class="widget-toolbar">
+                                <a href="javascript:;" data-action="collapse">
+                                    <i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row search_tj_bar">
+							<div class="col-xs-12">
+								<div class="center">
+                                    <div class="row">
+										#foreach ($data in $fieldList)
+										#if ($velocityCount > 1 && $velocityCount < 5)
+                                        <div class="col-xs-4">
+                                            <span>
+                                            	<label class="col-xs-12 col-sm-3">${data.remark}：</label>
+												<div class="input-group col-xs-12 col-sm-9">
+                                                    <input name="params['${data.bigfield}']" class="form-control search-query">
+                                                </div>
+                                            </span> 
+                                        </div>
+										#end
+										#end
+								</div>
+							</div>
+						</div>   
+                        <div class="bs_btn">
+						<button id="addBtn" class="btn btn-sm btn-success"><i class="ace-icon fa fa-hand-o-right bigger-120"></i>新增</button>
+						<button class="btn btn-sm" type="button" id="resetBtn">
+							<i class="ace-icon fa fa-undo bigger-110"></i>
+							重 置
+						</button>
+						<button id="seachBtn" type="button" class="btn btn-purple btn-sm">查找<i class="ace-icon fa fa-search icon-on-right bigger-110"></i></button>
+						
+                        </div>	  
+                	</div>	
+				</div>
+			</form>
+			<div class="space-6"></div>
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+	</div>
+	<!--$_include virtual="/include_footer.html"  -->
+
+	<script type="text/javascript">
+	var list_url  = ctxPaths+ '/${entityName}/query.ajax';
+	var delete_url   = ctxPaths+ '/${entityName}/delete.ajax';
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	${jquery}(function(${jquery}) {
+				jqGrid_init(${jquery}(grid_selector),pager_selector,{
+					url: list_url,
+					sortable : true,
+					#foreach ($data in $fieldList)
+					#if ($velocityCount == 2)
+					sortname : '$data.bigfield',
+					#end
+					#end 
+					sortorder:'desc',
+					colNames:[
+					#foreach ($data in $fieldList)
+					'${data.remark}',
+					#end
+					''
+					],
+					colModel:[
+						#foreach ($data in $fieldList)
+						   #if ($data.bigfield == $pkName)
+					{name:'$data.bigfield',index:'$data.bigfield', hidden:true},
+						   #else
+							#if ($velocityCount == 2)
+					{name:'$data.bigfield',index:'$data.bigfield', sortable:true,sortname : '$data.field',width:100,formatter:formatName},
+							#else
+					{name:'$data.bigfield',index:'$data.bigfield', sortable:true,sortname : '$data.field',width:100},
+							#end
+						   #end 
+					   #end
+					{name:'myac',index:'', width:120, fixed:true, sortable:false, resize:false,formatter:actionButtons}					
+					]
+				});
+				function formatName(cellvalue, options, rowObject){
+					return '<a href="javascript:;" onclick="viewEvent(\''+rowObject['$pkName']+'\')">' + cellvalue + '</a>';
+				}
+				function actionButtons(cellvalue, options, rowObject){
+					return '<div >' + 
+								'<button onclick=\"editEvent('+rowObject['$pkName']+')\" class=\"btn btn-xs btn-info\" data-rel=\"tooltip\" title=\"编辑\" >' +
+									'<i class=\"ace-icon fa fa-pencil bigger-120\"></i>' +
+								'</button>' + 
+								'<button onclick=\"deleteEvent('+rowObject['$pkName']+')\" class=\"btn btn-xs btn-danger\" data-rel=\"tooltip\" title=\"删除\" >' +
+									'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>' +
+								'</button>'  + 
+							'</div>';
+				}
+				
+			});
+
+			function editEvent(id){
+				window.location.href = ctxPaths+'/pages/${tableName}_add.shtml?$pkName=' + id;
+			};
+			function viewEvent(id){
+				window.location.href = ctxPaths+'/pages/${tableName}_view.shtml?$pkName=' + id;
+			};
+			function deleteEvent(id){
+				Q_Confirm("是否要删除？",function(result) {
+					if(result){
+						${jquery}.ajaxSubmit(delete_url,{'$pkName' : id}, function(data){
+							${jquery}(grid_selector).jqGrid('setGridParam',{page:1}).trigger("reloadGrid");
+						});
+					}
+				});
+			};
+			
+			add_validator = ${jquery}('#add-form').validate({
+					rules: {
+						#foreach ($data in $fieldList)
+	 					#if ($data.bigfield != $pkName)
+					'$data.bigfield' : {
+	 					#if (!${data.isnull})
+	 					required:true,
+	 					#end 
+	 					maxlength: $data.typelength
+					 }#if ($fieldList.size() != $velocityCount),#end
+	 				 #end		
+	 				#end
+					},
+					submitHandler: function (form) {
+						${jquery}.ajaxSubmit(update_url,${jquery}(form).serializeJson(),function(data){
+								if(data.success == true){
+								    ${jquery}('#add-form-modal').modal2('hide');
+									${jquery}(grid_selector).trigger("reloadGrid");
+								}else{
+									Q_Alert_Fail(data.message); 
+								}
+						});
+						return false;		
+					}
+			});
+			
+			${jquery}('#addBtn').on('click', function(){
+				window.location.href = ctxPaths+'/pages/${tableName}_add.shtml';
+			});
+			
+			${jquery}('#seachBtn').on('click', function(){
+				${jquery}(grid_selector).jqGrid('setGridParam',{postData: ${jquery}('#queryForm').serializeJson(),page:1}).trigger("reloadGrid");
+			});
+			${jquery}('#resetBtn').on('click',function(){
+				resetForm(${jquery}('#queryForm'));
+			});
+		</script>
+</body>
+</html>

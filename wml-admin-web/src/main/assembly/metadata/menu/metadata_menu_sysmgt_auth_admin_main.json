@@ -1,0 +1,43 @@
+{
+    "domain": "admin",
+    "subsystem": "wml-admin",
+    "data": [
+      	{
+            "id": "10010",
+            "text": "成员信息管理",
+            "iconCls": "nav",
+            "menuOrder": "1",
+            "leaf": false,
+            "icon": "menu-icon fa fa-tachometer",
+            "menuKey": "staff_manage",
+            "children": [{
+                    "text": "成员列表",
+                    "menuOrder": "1",
+                    "leaf": "true",
+                    "url": "/pages/staff/staff_list.shtml",
+                    "id": "10011",
+                    "icon":"icon-user",
+                    "menuKey": "auth_staff_info"
+                }
+            ]
+        },{
+        	"id": "10020",
+            "text": "自动生成",
+            "iconCls": "nav",
+            "menuOrder": "2",
+            "leaf": false,
+            "icon": "menu-icon fa fa-tachometer",
+            "menuKey": "generated_manage",
+            "children": [{
+                    "text": "自动生成代码",
+                    "menuOrder": "1",
+                    "leaf": "true",
+                    "url": "/pages/generated/generated.shtml",
+                    "id": "10021",
+                    "icon":"icon-user",
+                    "menuKey": "auth_generated_info"
+                }
+            ]
+        }
+    ]
+}

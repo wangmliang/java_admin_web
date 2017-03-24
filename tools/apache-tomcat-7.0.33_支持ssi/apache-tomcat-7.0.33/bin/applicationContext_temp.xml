@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><beans default-lazy-init="true" xmlns="http://www.springframework.org/schema/beans"        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"        xmlns:aop="http://www.springframework.org/schema/aop"        xmlns:tx="http://www.springframework.org/schema/tx"        xsi:schemaLocation="            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"><description >Spring Configuration</description><context:component-scan xmlns:context="http://www.springframework.org/schema/context" base-package="com.aspire.comp"><!-- base-package ������á�,���ָ� -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan><tx:annotation-driven xmlns:tx="http://www.springframework.org/schema/tx" transaction-manager="transactionManager" proxy-target-class="true"/><beans  profile="production">
+		<!-- ���Դ����, ʹ��Ӧ�÷��������ݿ�l�ӳ� 
+		<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/flow800" />-->
+	
+		<!-- ���Դ����, ��ʹ��l�ӳ� -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+			<property name="url" value="jdbc:oracle:thin:@10.1.4.203:1521:ora10g"/>
+			<property name="username" value="foss"/>
+			<property name="password" value="foss"/>
+		</bean>
+		
+	</beans><bean id="emailDao" class="com.aspire.sims.rtplt.component.email.dao.ibatis.EmailDaoImpl">
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient"/>
+		</property>
+	</bean><bean  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.aspire.comp"/>
+		<property name="annotationClass" value="com.aspire.comp.foss.common.mybatis.MyBatisRepository"/>
+	</bean><bean id="emailSender" class="com.aspire.sims.rtplt.component.email.impl.SimpleEmailSender">
+		<property name="emailDao">
+			<ref local="emailDao"/>
+		</property>	
+	</bean><bean  id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/><bean  id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+	        <property name="configLocations">   
+	        	<list>   
+	            	<value>classpath:/sqlMapConfig-component-attachment.xml</value>  
+	            	<value>classpath:/sqlMapConfig-component-email.xml</value>  
+	        	</list>    
+	        </property>   
+	    	<property name="dataSource" ref="dataSource"/>
+	  </bean><bean  id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource"/>
+  	</bean><bean  id="paginationInterceptor" class="com.aspire.comp.foss.common.mybatis.interceptor.PaginationInterceptor">
+		<property name="databaseType" value="Oracle"/> 
+	</bean><bean id="attachmentTypeDao" class="com.aspire.sims.rtplt.component.attachment.dao.ibatis.AttachmentTypeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean><bean id="attachmentFileDao" class="com.aspire.sims.rtplt.component.attachment.dao.ibatis.AttachmentFileDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean><bean id="attachmentInterface" class="com.aspire.sims.rtplt.component.attachment.impl.AttachmentImpl">
+		<property name="attachmentFileDao" ref="attachmentFileDao"/>
+		<property name="attachmentGroupDao" ref="attachmentGroupDao"/>
+		<property name="attachmentTypeDao" ref="attachmentTypeDao"/>
+	</bean><bean id="attachmentGroupDao" class="com.aspire.sims.rtplt.component.attachment.dao.ibatis.AttachmentGroupDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean><bean  id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<!-- �Զ�ɨ��entityĿ¼, ʡ��Configuration.xml����ֹ����� -->
+		<property name="typeAliasesPackage" value="com.aspire.comp.foss.common.entity"/>
+		<!-- ��ʽָ��Mapper�ļ�λ�� -->
+		<property name="mapperLocations" value="classpath:/com/aspire/comp/foss/common/mapper/*Mapper.xml"/>
+		 <property name="plugins">
+			<list>
+				<ref bean="paginationInterceptor"/>
+			</list>
+		</property>
+	</bean></beans>

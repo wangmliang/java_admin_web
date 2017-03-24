@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE domain SYSTEM "Metadata_Menu_Desc.dtd">
+<domain id="admin">
+	<main file="metadata_menu_sysmgt_auth_admin_main.json" isFileset="false"/>	
+</domain>

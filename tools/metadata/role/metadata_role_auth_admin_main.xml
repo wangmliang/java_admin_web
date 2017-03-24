@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE metadata SYSTEM "Metadata_Role_Main.dtd">
+<metadata>
+	<roles>
+		<role key="101" name="已注册成员拥有的角色" desc="所有已注册成员都属于该角色" canModify="no" autoAssign="yes">
+			<!--
+			<resource key="auth_admin_sys_individual_modifyInfo">
+				<operation key="QUERY"/>
+			</resource>
+			-->
+			<resource key="auth_admin_sys_individual_modifyPwd">
+				<operation key="QUERY"/>
+			</resource>
+			<!--
+			<resource key="auth_admin_sys_individual_selfconfig">
+				<operation key="QUERY"/>
+			</resource>
+			
+			<resource key="auth_admin_sys_individual_viewStaff">
+				<operation key="QUERY"/>
+			</resource>
+			-->
+		</role>
+		<role key="1001" name="系统管理角色" desc="能够维护成员和组织信息、分配角色" canModify="yes">
+			<resource key="auth_admin_sys_dept_deptManage">
+				<operation key="QUERY"/>
+				<operation key="MODIFY"/>
+				<operation key="DELETE"/>
+				<operation key="ROLE2DEPT"/>
+				<operation key="STAFF2DEPT"/>
+				<operation key="AUTH2STAFF"/>
+			</resource>
+			<!--
+			<resource key="auth_admin_sys_dept_spDeptManage">
+				<operation key="QUERY"/>
+			</resource>
+			-->
+			<resource key="auth_admin_sys_staff_staffManage">
+				<operation key="QUERY"/>
+				<operation key="ADD"/>
+				<operation key="UPDATE"/>
+				<operation key="DELETE"/>
+				<operation key="RESETPWD"/>
+				<operation key="LOCKSTAFF"/>
+				<operation key="AUTHSTAFF"/>
+			</resource>
+			
+			<resource key="auth_admin_sys_role_roleManage">
+				<operation key="QUERY"/>
+				<operation key="ADD"/>
+				<operation key="MODIFY"/>
+				<operation key="DELETE"/>
+				<operation key="AUTHROLE"/>
+			</resource>
+			<!--
+			<resource key="auth_admin_accountmg_all">
+				<operation key="QUERY"/>
+				<operation key="DETAIL"/>
+				<operation key="AUDIT"/>
+				<operation key="EXPORT"/>
+				<operation key="STATLIST"/>
+			</resource>
+			-->
+	
+		</role>
+		<role key="1002" name="组织管理角色" desc="组织成员拥有该角色后，自动成为组织管理员，能够维护组织成员和子组织" canModify="yes">
+			<resource key="auth_admin_sys_dept_deptManage">
+				<operation key="QUERY"/>
+				<operation key="MODIFY"/>
+				<operation key="DELETE"/>
+				<operation key="ROLE2DEPT"/>
+				<operation key="STAFF2DEPT"/>
+				<operation key="AUTH2STAFF"/>
+			</resource>
+			<!--
+			<resource key="auth_admin_sys_dept_spDeptManage">
+				<operation key="QUERY"/>
+			</resource>
+			-->
+			<resource key="auth_admin_sys_staff_staffManage">
+				<operation key="QUERY"/>
+				<operation key="ADD"/>
+				<operation key="UPDATE"/>
+				<operation key="DELETE"/>
+				<operation key="RESETPWD"/>
+				<operation key="LOCKSTAFF"/>
+				<operation key="AUTHSTAFF"/>
+			</resource>
+		</role>
+		<role key="1003" name="系统配置角色" desc="能够进行角色管理" canModify="yes">
+			<resource key="auth_admin_sys_role_roleManage">
+				<operation key="QUERY"/>
+				<operation key="ADD"/>
+				<operation key="MODIFY"/>
+				<operation key="DELETE"/>
+				<operation key="AUTHROLE"/>
+			</resource>
+		</role>
+	</roles>
+</metadata>

@@ -1,0 +1,250 @@
+#set($jquery="$")
+#set($_include = '#include')
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!--$_include virtual="/root.jsp"  -->
+	<title>${entityName}</title>
+	<!--$_include virtual="/include.html"  -->
+</head>
+<body>
+	<div class="breadcrumbs" id="breadcrumbs">
+		<ul class="breadcrumb">
+			<li class="active"> <i class="ace-icon fa fa-home home-icon"></i>
+				${entityName}
+			</li>
+		</ul>
+		<!-- .breadcrumb -->
+
+	</div>
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form role="form" id="queryForm" onsubmit="return false;">
+				<div class="form-inline">
+					<button id="addBtn" class="btn btn-sm btn-success" type="button"> <i class="ace-icon fa fa-hand-o-right white"></i>
+						新增
+					</button>
+					&nbsp;&nbsp;
+					<input id="searchText" name="keyword" type="text" class="form-control search-query" placeholder="输入关键字" />
+
+					<button id="seachBtn" type="button" class="btn btn-purple btn-sm">
+						查找
+						<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+					</button>
+
+				</div>
+			</form>
+			<div class="space-6"></div>
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+	</div>
+
+	<!--  新增form  -->
+	<div id="add-form-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<form class="form-horizontal" role="form" id="add-form" onsubmit="return false;">
+				<input type="hidden" name="${pkName}"  id="${pkName}"/>
+				<input type="hidden" name="updId"  id="updId"/>
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="blue bigger">新增/修改</h4>
+					</div>
+					<div class="modal-body">
+						#foreach ($data in $fieldList)
+	 				#if ($data.bigfield != $pkName)
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="$data.bigfield">
+								#if (!$data.isnull)
+								<span class="red">*</span>
+								#end
+							${data.remark}:
+							</label>
+							<div class="col-sm-5">
+								<input type="text" name="$data.bigfield" id="$data.bigfield" placeholder="${data.remark}" class="form-control input-sm" />
+							</div>
+						</div>
+						#end
+					#end
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn btn-sm" type="button"  data-dismiss="modal">
+							<i class="ace-icon fa fa-times"></i>
+							取消
+						</button>
+
+						<button id="save-role-btn" class="btn btn-sm btn-success" type="submit">
+							<i class="ace-icon fa fa-check"></i>
+							保存
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!--  详情查看  -->
+	<div id="view-form-modal" class="modal" role="dialog" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="blue bigger">详情</h4>
+				</div>
+
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+					#foreach ($data in $fieldList)
+	 				#if ($data.bigfield != $pkName)
+					<div class="form-group">
+						<label class="col-sm-5 control-label no-padding-right text-right">
+							${data.remark}:
+						</label>
+						<div class="col-sm-7">
+							<p name="$data.bigfield" class="form-control-static"></p>
+						</div>
+					</div>
+					#end
+					#end
+					</form>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-sm" type="button"  data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						确定
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--$_include virtual="/include_footer.html"  -->
+
+	<script type="text/javascript">
+	var list_url  = ctxPaths+ '/${entityName}/query.ajax';
+	var update_url   = ctxPaths+ '/${entityName}/add.ajax';
+	var delete_url   = ctxPaths+ '/${entityName}/delete.ajax';
+	var view_url 	 = ctxPaths+ '/${entityName}/get.ajax';
+	var grid_selector = "#grid-table";
+	var pager_selector = "#grid-pager";
+	var add_validator;
+	${jquery}(function(${jquery}) {
+				jqGrid_init(${jquery}(grid_selector),pager_selector,{
+					url: list_url,
+					sortable : true,
+					#foreach ($data in $fieldList)
+					#if ($velocityCount == 2)
+					sortname : '$data.bigfield',
+					#end
+					#end 
+					sortorder:'desc',
+					colNames:[
+					#foreach ($data in $fieldList)
+					'${data.remark}',
+					#end
+					''
+					],
+					colModel:[
+						#foreach ($data in $fieldList)
+						   #if ($data.bigfield == $pkName)
+					{name:'$data.bigfield',index:'$data.bigfield', hidden:true},
+						   #else
+							#if ($velocityCount == 2)
+					{name:'$data.bigfield',index:'$data.bigfield', sortable:true,sortname : '$data.field',width:100,formatter:formatName},
+							#else
+					{name:'$data.bigfield',index:'$data.bigfield', sortable:true,sortname : '$data.field',width:100},
+							#end
+						   #end 
+					   #end
+					{name:'myac',index:'', width:120, fixed:true, sortable:false, resize:false,formatter:actionButtons}					
+					]
+				});
+				function formatName(cellvalue, options, rowObject){
+					return '<a href="javascript:;" onclick="viewEvent(\''+rowObject['$pkName']+'\')">' + cellvalue + '</a>';
+				}
+				function actionButtons(cellvalue, options, rowObject){
+					return '<div >' + 
+								'<button onclick=\"editEvent('+rowObject['$pkName']+')\" class=\"btn btn-xs btn-info\" data-rel=\"tooltip\" title=\"编辑\" >' +
+									'<i class=\"ace-icon fa fa-pencil bigger-120\"></i>' +
+								'</button>' + 
+								'<button onclick=\"deleteEvent('+rowObject['$pkName']+')\" class=\"btn btn-xs btn-danger\" data-rel=\"tooltip\" title=\"删除\" >' +
+									'<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>' +
+								'</button>'  + 
+							'</div>';
+				}
+				
+			});
+
+			function editEvent(id){
+				${jquery}.ajaxSubmit(view_url,{'$pkName': id}, function(data){
+				    if(data.success == true){
+						resetForm(${jquery}('#add-form'),add_validator);
+						${jquery}('#add-form').json2Form2(data.data);
+						${jquery}('#updId').val(${jquery}('${pkName}').val());
+						${jquery}('#add-form-modal').modal2({backdrop:"static",show:true});
+					}else{
+						Q_Alert_Fail(data.message);
+					}
+				});
+			};
+			function viewEvent(id){
+				${jquery}.ajaxSubmit(view_url,{'$pkName' : id}, function(data){
+					${jquery}.dataInput($('#view-form-modal').find('.form-control-static'),data.data);
+					${jquery}('#view-form-modal').modal2({backdrop:"static",show:true});		
+				});
+			};
+			function deleteEvent(id){
+				Q_Confirm("是否要删除？",function(result) {
+					if(result){
+						${jquery}.ajaxSubmit(delete_url,{'$pkName' : id}, function(data){
+							${jquery}(grid_selector).jqGrid('setGridParam',{page:1}).trigger("reloadGrid");
+						});
+					}
+				});
+			};
+			
+			add_validator = ${jquery}('#add-form').validate({
+					rules: {
+						#foreach ($data in $fieldList)
+	 					#if ($data.bigfield != $pkName)
+					'$data.bigfield' : {
+	 					#if (!${data.isnull})
+	 					required:true,
+	 					#end 
+	 					maxlength: $data.typelength
+					 }#if ($fieldList.size() != $velocityCount),#end
+	 				 #end		
+	 				#end
+					},
+					submitHandler: function (form) {
+						${jquery}.ajaxSubmit(update_url,${jquery}(form).serializeJson(),function(data){
+								if(data.success == true){
+								    ${jquery}('#add-form-modal').modal2('hide');
+									${jquery}(grid_selector).trigger("reloadGrid");
+								}else{
+									Q_Alert_Fail(data.message); 
+								}
+						});
+						return false;		
+					}
+			});
+			
+			${jquery}('#addBtn').on('click', function(){
+			    resetForm(${jquery}('#add-form'),add_validator);
+				${jquery}('#${pkName}').val('');
+				${jquery}('#add-form-modal').modal2({backdrop:"static",show:true});
+			});
+			
+			${jquery}('#seachBtn').on('click', function(){
+				${jquery}(grid_selector).jqGrid('setGridParam',{postData: ${jquery}('#queryForm').serializeJson(),page:1}).trigger("reloadGrid");
+			});
+			
+		</script>
+</body>
+</html>

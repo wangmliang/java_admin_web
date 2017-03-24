@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE domain SYSTEM "Metadata_Auth_Main.dtd">
+<domain id="admin" subsystem="wml-admin">
+	<!-- 资源分类－第一级 -->
+	<resource-category key="manager" orderKey="2000" name="测试管理平台" desc="测试管理平台">
+		<resource-category key="auth_staff_manage" name="成员信息" desc="成员信息">
+			<resource key="auth_staff_info" name="成员信息管理" desc="成员信息管理">
+                <operation key="query" name="列表" desc="列表">
+                    <address name="列表" url="/pages/staff/staff_list.shtml" />
+                    <address name="成员信息查询" url="/staff/query.ajax" />
+                    <address name="查询成员信息" url="/staff/selectStaffInfoByName.ajax" />
+                </operation>
+                <operation key="export" name="导出" desc="导出">
+                    <address name="导出" url="/staff/staffExport.ajax" />
+                </operation>
+                <operation key="add" name="新增" desc="新增">
+                	<address name="新增页" url="/pages/staff/staff_add.shtml" />
+                    <address name="新增" url="/staff/add.ajax" />
+                </operation>
+                <operation key="delete" name="删除" desc="删除">
+                    <address name="删除" url="/staff/delete.ajax" />
+                </operation>
+            </resource>
+		</resource-category>
+		
+		<resource-category key="auth_generated_manage" name="代码自动生成息" desc="代码自动生成">
+			<resource key="auth_generated_info" name="代码生成" desc="代码生成">
+                <operation key="add" name="自动生成" desc="自动生成">
+                    <address name="页面" url="/pages/generated/generated.shtml" />
+                    <address name="自动生成" url="/generated/generatedCode.ajax" />
+                </operation>
+                <operation key="export" name="下载" desc="下载">
+                    <address name="新增" url="/generated/download.ajax" />
+                </operation>
+            </resource>
+		</resource-category>
+	</resource-category>
+</domain>
