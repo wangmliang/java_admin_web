@@ -1,0 +1,80 @@
+{
+    "domain": "admin",
+    "subsystem": "auth_sysmgt",
+    "data": [
+        {
+            "id": "999999999",
+            "text": "系统管理",
+            "iconCls": "menu-icon fa fa-cogs",
+            "menuOrder": "900000",
+            "leaf": false,
+            "icon": "menu-icon fa fa-pencil-square-o",
+            "menuKey": "auth_sysmgt_admin_sysmgtall",
+            "children": [
+                {
+                    "text": "修改帐号信息",
+                    "menuOrder": "10000",
+                    "leaf": "true",
+                    "url": "/pages/auth/individual/modifyInfo.shtml",
+                    "id": "sys9999931",
+		    "icon":"icon-user",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_indiv_modifyinfo"
+                },
+                {
+                    "text": "修改密码",
+                    "menuOrder": "20000",
+                    "leaf": "true",
+                    "url": "/pages/auth/individual/modifyPwd.shtml",
+                    "id": "sys9999932",
+		    "icon":"icon-lock",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_indiv_modifypwd"
+                },
+                {
+                    "text": "设置个性化参数",
+                    "menuOrder": "30000",
+                    "leaf": "true",
+                    "url": "/pages/auth/individual/selfConfigSetting.shtml",
+                    "id": "sys9999933",
+		    "icon":" icon-magnet",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_indiv_setting"
+                },
+                {
+                    "text": "组织管理",
+                    "menuOrder": "40000",
+                    "leaf": "true",
+                    "url": "/pages/auth/dept.shtml",
+                    "id": "sys99999121",
+		    "icon":"icon-sitemap",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_dept_deptmsg"
+                },
+                {
+                    "text": "成员管理",
+                    "menuOrder": "50000",
+                    "leaf": "true",
+                    "url": "/pages/auth/staff.shtml",
+                    "id": "sys99999122",
+		    "icon":"icon-user-md",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_dept_staffmgt"
+                },
+                {
+                    "text": "角色管理",
+                    "menuOrder": "60000",
+                    "leaf": "true",
+                    "url": "/pages/auth/role.shtml",
+                    "id": "sys99999123",
+		    "icon":"icon-group",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_dept_rolemgt"
+                },
+                {
+                    "text": "组织管理日志",
+                    "menuOrder": "70000",
+                    "leaf": "true",
+                    "url": "/pages/auth/log/queryAccountLog.jsp",
+                    "id": "sys199999125",
+		    "icon":"icon-table",
+                    "menuKey": "auth_sysmgt_admin_sysmgtall_orgoperationlog"
+                }
+            ]
+        }
+    ]
+}

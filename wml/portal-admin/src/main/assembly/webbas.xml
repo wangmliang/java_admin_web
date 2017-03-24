@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webbas>
+	<portal>
+		<!-- 系统名称 -->
+		<system-name>Test营销运营管理平台</system-name>
+
+		<!-- 用于登陆前后首页系统名称展示的title -->
+		<title>营销运营管理平台</title>
+
+		<!-- 为了兼容老WEBBAS的加密算法，特加此配置项，默认不配置为关闭 
+		      on 为开启  
+			  off 为关闭
+		-->
+		<old-password-crypt-support>on</old-password-crypt-support>
+		<!--是否检查检验码true/false-->
+    	<checkCode>false</checkCode>
+    	 <!--是否登录后针对SP用户跳转到协议阅读页面true/false-->
+        <contractAgreement>false</contractAgreement>
+    	<!--是否开启注册功能true/false-->
+    	<is-register-on>false</is-register-on>
+    	<!--注册页面地址,当is-register-on设为true时有效-->
+    	<register-url>http://ip/resgister/</register-url>
+    	<!--是否开启忘记密码功能true/false-->
+    	<is-forgotpwd-on>false</is-forgotpwd-on>
+    	<!--忘记密码页面地址,当is-forgotpwd-on设为true时有效-->
+    	<forgotpwd-url>http://ip/forgotpwd/</forgotpwd-url>
+    </portal>
+	<email>
+	</email>
+</webbas>

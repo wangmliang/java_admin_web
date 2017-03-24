@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE domain SYSTEM "Metadata_Auth_Main.dtd">
+<domain id="admin" subsystem="exclude_portal_admin">
+	<resource-category key="exclude_portal_admin" name="portal例外资源" desc="portal例外资源">
+		<!-- session例外资源-->
+		<resource key="exclude_portal_admin_session" name="session例外资源" desc="session例外资源" authType="UNAUTH">
+			<operation key="EXCLUDE" name="例外" desc="例外">	
+				
+				<address name="校验码" url="/code/getCode.ajax"/>
+				
+				<address name="登录action" url="/portal/login.ajax"/>
+				<address name="登录页面" url="/pages/login.shtml"/>
+				<address name="退出登录" url="/portal/logout.ajax"/>
+				
+				<address name="协议阅读action" url="/portal/readContractAgreement.ajax"/>
+				<address name="协议阅读页面" url="/pages/agreement.shtml"/>
+				
+				<address name="404错误页面" url="/pages/404.shtml"/>
+				<address name="500错误页面" url="/pages/500.shtml"/>
+				<address name="未授权提醒页面" url="/pages/noAuthority.shtml"/>
+				<address name="页面签权url" url="/auth/pageAuth.ajax"/>
+				<address name="页面签权url" url="/auth/ifmStyle.ajax"/>
+			</operation>
+		</resource>
+			
+		<!-- 鉴权例外资源-->
+		<resource key="exclude_portal_admin_perm" name="鉴权例外资源" desc="鉴权例外资源" authType="LOGIN_AUTH">
+			<operation key="EXCLUDE" name="前台鉴权例外" desc="登录后就可访问">
+				<address name="首页菜单请求" url="/portal/menu.ajax"/>	
+				<address name="首页" url="/pages/main.shtml"/>
+				<address name="取用户信息" url="/staff/findLoginStaff.ajax"/>
+				
+				<address name="退出登录" url="/portal/logout.ajax"/>
+				<address name="个人管理页面" url="/pages/auth/individual/modifyInfo.shtml"/>
+				<address name="查询个人资料" url="/staff/findLoginStaff.ajax"/>
+				<address name="修改个人资料" url="/staff/updateStaff.ajax"/>
+				
+				<address name="修改个人密码页面" url="/pages/auth/individual/modifyPwd.shtml"/>
+				<address name="修改个人密码" url="/staff/changePwd.ajax"/>
+
+				
+			</operation>
+		</resource>	
+	</resource-category>
+</domain>

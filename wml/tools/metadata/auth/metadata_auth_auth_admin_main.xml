@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE domain SYSTEM "Metadata_Auth_Main.dtd">
+<domain id="admin" subsystem="auth">
+	<!-- 资源分类－第一级 -->
+	<resource-category key="auth_admin" orderKey="3000"  name="系统管理" desc="系统管理">
+		<!-- 资源-->
+		<resource-category key="auth_admin_sys_individual" name="个人管理" desc="个人管理">
+			<resource key="auth_admin_sys_individual_modifyInfo" name="修改帐号信息" desc="修改帐号信息">
+				<!-- 资源操作-DO -->
+				<operation key="QUERY" name="修改" desc="修改">
+					<address name="个人管理页面" url="/pages/auth/individual/modifyInfo.shtml"/>
+					<address name="查询个人资料" url="/staff/findLoginStaff.ajax"/>
+					<address name="修改个人资料" url="/staff/updateStaff.ajax"/>
+					<address name="查询个人扩展属性" url="/staff/findStaffExtendProperties.ajax"/>
+				</operation>
+			</resource>
+			<resource key="auth_admin_sys_individual_modifyPwd" name="修改个人密码" desc="修改个人密码">
+				<!-- 资源操作-DO -->
+				<operation key="QUERY" name="修改" desc="修改">
+					<address name="修改个人密码页面" url="/pages/auth/individual/modifyPwd.shtml"/>
+					<address name="修改个人密码" url="/staff/changePwd.ajax"/>
+				</operation>
+			</resource>
+			<resource key="auth_admin_sys_individual_selfconfig" name="个性化参数设置" desc="个性化参数设置">
+				<!-- 资源操作-DO -->
+				<operation key="QUERY" name="查询" desc="查询">
+					<address name="个性化参数修改页面" url="/pages/auth/individual/selfConfigSetting.shtml"/>
+					<address name="个性化参数查询" url="/pendTaskSetting/get.ajax"/>
+					<address name="个性化参数设置" url="/pendTaskSetting/update.ajax"/>
+				</operation>
+			</resource>
+		</resource-category>
+		<resource-category key="auth_admin_sys_dept" name="组织管理" desc="组织管理">
+				<resource key="auth_admin_sys_dept_deptManage" name="组织管理" desc="组织管理">
+					<!-- 资源操作-->
+					<operation key="QUERY" name="组织查询" desc="组织查询">
+						<address name="组织管理页面" url="/pages/auth/dept.shtml"/>
+						<address name="组织树查询" url="/department/listDepartmentTree.ajax"/>
+						<address name="组织查询" url="/department/findDepartment.ajax"/>
+						<address name="组织详情查询" url="/department/findDepartmentInfo.ajax"/>
+						<address name="更新组织" url="/department/updateDepartment.ajax"/>
+						<address name="删除组织" url="/department/delDepartment.ajax"/>
+					</operation>
+					<operation key="MODIFY" name="组织修改" desc="组织修改">
+						<address name="更新组织" url="/department/updateDepartment.ajax"/>
+					</operation>
+					<operation key="DELETE" name="组织删除" desc="组织删除">
+						<address name="删除组织" url="/department/delDepartment.ajax"/>
+					</operation>
+					<operation key="ROLE2DEPT" name="组织添加角色" desc="组织添加角色">
+						<address name="添加组织角色" url="/department/updateDepartmentRole.ajax"/>
+						<address name="查询组织角色列表" url="/department/listDepartmentRoles.ajax"/>
+					</operation>
+					<operation key="STAFF2DEPT" name="组织添加用户" desc="组织添加用户">
+						<address name="查询组织用户列表" url="/staff/listStaff.ajax"/>
+						<address name="添加组织用户" url="/staff/updateStaffDepartment.ajax"/>
+					</operation>
+					<operation key="AUTH2STAFF" name="组织成员授权" desc="组织成员授权">
+						<address name="查询角色关联下用户列表" url="/staff/listRoleByStaffIds.ajax"/>
+						<address name="组织里用户权限修改" url="/staff/updateStaffRolesDepartment.ajax"/>
+					</operation>
+				</resource>
+				
+		</resource-category>
+		<resource-category key="auth_admin_sys_staff" name="成员管理" desc="成员管理">
+			<resource key="auth_admin_sys_staff_staffManage" name="成员管理" desc="成员管理">
+				<!-- 资源操作-->
+				<operation key="QUERY" name="查询" desc="查询">
+					<address name="成员管理页面" url="/pages/auth/staff.shtml"/>
+					<address name="查询请求" url="/staff/listStaff.ajax"/>
+				</operation>
+				<operation key="ADD" name="创建" desc="创建用户">
+					<address name="查询用户是否存在" url="/staff/checkStaffLoginName.ajax"/>
+					<address name="查询用户是否存在" url="/staff/checkStaffMobile.ajax"/>
+					<address name="查询用户是否存在" url="/staff/checkStaffEmail.ajax"/>
+					<address name="创建请求" url="/staff/createStaff.ajax"/>
+					<address name="查询个人扩展属性" url="/staff/findStaffExtendProperties.ajax"/>
+				</operation>
+				
+				<operation key="UPDATE" name="修改" desc="更新用户">
+					<address name="查询用户是否存在" url="/staff/checkStaffLoginName.ajax"/>
+					<address name="获取用户详情" url="/staff/findStaff.ajax"/>
+					<address name="更新" url="/staff/updateStaff.ajax"/>
+					<address name="查询个人扩展属性" url="/staff/findStaffExtendProperties.ajax"/>
+				</operation>
+				<operation key="DELETE" name="删除" desc="删除用户">
+					<address name="删除请求" url="/staff/deleteStaff.ajax"/>
+				</operation>
+				<operation key="LOCKSTAFF" name="锁定" desc="查询">
+					<address name="锁定请求" url="/staff/lockStaff.ajax"/>
+				</operation>
+				<operation key="RESETPWD" name="重置密码" desc="重置密码">
+					<address name="重置密码请求" url="/staff/resetPwd.ajax"/>
+				</operation>
+				<operation key="AUTHSTAFF" name="授权" desc="用户授权">
+					<address name="获取用户详情" url="/staff/findStaff.ajax"/>
+					<address name="查询用户角色列表" url="/staff/listStaffRoles.ajax"/>
+					<address name="更新用户角色" url="/staff/updateStaffRole.ajax"/>
+				</operation>
+			</resource>
+
+		</resource-category>
+		<resource-category key="auth_admin_sys_role" name="角色管理" desc="角色管理">
+			<resource key="auth_admin_sys_role_roleManage" name="角色管理" desc="角色管理">
+				<operation key="QUERY" name="查询" desc="查询">
+					<address name="浏览角色页面" url="/pages/auth/role.shtml"/>
+					<address name="查看" url="/role/listRoles.ajax"/>
+				</operation>
+				<operation key="ADD" name="新增角色" desc="新增角色" depend="QUERY">
+					<address name="查询角色助记码是否存在" url="/role/checkRoleKey.ajax"/>
+					<address name="添加" url="/role/updateRole.ajax"/>
+				</operation>
+				<operation key="MODIFY" name="修改角色" desc="修改角色" depend="QUERY">
+					<address name="查询角色助记码是否存在" url="/role/checkRoleKey.ajax"/>
+					<address name="查询角色详情" url="/role/findRole.ajax"/>
+					<address name="修改" url="/role/updateRole.ajax"/>
+				</operation>
+				<operation key="DELETE" name="删除角色" desc="删除角色" depend="QUERY">
+					<address name="删除角色" url="/role/deleteRole.ajax"/>
+				</operation>
+				<operation key="AUTHROLE" name="角色关联权限" desc="角色关联权限">
+					<address name="浏览角色页面" url="/pages/auth/roleSetting.shtml"/>
+					<address name="权限列表" url="/role/listRoleResource.ajax"/>
+					<address name="关联角色权限" url="/role/updateRoleResource.ajax"/>
+				</operation>
+			</resource>
+		</resource-category>
+	</resource-category>
+	
+</domain>

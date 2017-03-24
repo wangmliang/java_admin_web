@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<!--#include virtual="/root.jsp"  -->
+<title>自动生成页面</title>
+<!--#include virtual="/include.html"  -->
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/chosen.css">
+
+
+<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+<!-- page specific plugin styles -->
+<link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+
+<link rel="stylesheet" href="assets/css/ui.jqgrid.css" />
+<!-- text fonts -->
+<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+<!-- ace styles -->
+<link rel="stylesheet" href="assets/css/ace.min.css" />
+<!--[if lte IE 9]>
+<link rel="stylesheet" href="assets/css/ace-part2.min.css" />
+<![endif]-->
+<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+<link rel="stylesheet" href="js/select2-3.5.1/select2.css" />
+
+<link rel="stylesheet" href="css/css.css" />
+<!--[if lte IE 9]>
+<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+<![endif]-->
+<!-- inline styles related to this page -->
+<!-- ace settings handler -->
+<script src="assets/js/ace-extra.min.js"></script>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lte IE 8]>
+<script src="assets/js/html5shiv.js"></script>
+<script src="assets/js/respond.min.js"></script>
+<![endif]-->
+<!--[if !IE]>
+-->
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='assets/js/jquery.min.js'>" + "<"+"/script>");
+</script>
+<!-- <![endif]-->
+<!--[if IE]>
+<script type="text/javascript">
+		 window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");</script>
+<![endif]-->
+<script type="text/javascript">
+	if ('ontouchstart' in document.documentElement)
+		document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<"+"/script>");
+</script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="js/select2-3.5.1/select2.min.js"></script>
+<script src="js/select2-3.5.1/select2_locale_zh-CN.js"></script>
+<script src="assets/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<div class="page-header">
+				<h1>
+					<small>&gt;&gt;&gt;&nbsp;代码自动生成</small>
+				</h1>
+			</div>
+			<form class="form-horizontal" id="add-form" onsubmit="return false;">
+				<div class="row">
+					<div class="col-xs-6">
+						<div id="account_div">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right text-right" for="adviserName"> 
+									<span class="red">*</span> 公司名称:
+								</label>
+								<div class="col-sm-6">
+									<input type="text" name="corporateName" placeholder="因纳特科技有限公司" class="form-control input-sm" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="customServiceName"> 
+								<span class="red">*</span> 数据库地址:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="url" placeholder="192.168.1.170:3306/logis" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="otherLinkman"> 
+								<span class="red">*</span> 数据库连接用户:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="user" placeholder="root" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="otherLinkman"> 
+								<span class="red">*</span> 实体类包名:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="entityPackage" placeholder="com.yntsoft.entity" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="otherLinkman"> 
+								<span class="red">*</span> XML包名:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="xmlPackage" placeholder="com.yntsoft.mapper.xml" class="form-control input-sm" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="adviserMobile"> 
+								<span class="red">*</span> 作者:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="author" placeholder="王名亮" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="customServiceMobile"> 
+								<span class="red">*</span> 请选择驱动:
+							</label>
+							<div class="col-sm-6">
+								<select name="driver" class="form-control input-sm">
+									<option value="">请选择数据库连接驱动</option>
+									<option value="com.mysql.jdbc.Driver">Mysql:com.mysql.jdbc.Driver</option>
+									<option value="oracle.jdbc.OracleDriver">Oracle:oracle.jdbc.OracleDriver</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="otherMobile">
+								<span class="red">*</span> 数据库连接密码: 
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="password" placeholder="123456" class="form-control input-sm" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-right text-right" for="otherLinkman"> 
+								<span class="red">*</span> 接口包名:
+							</label>
+							<div class="col-sm-6">
+								<input type="text" name="mapperPackage" placeholder="com.yntsoft.mapper" class="form-control input-sm" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix form-actions">
+					<div class="center">
+						<button class="btn btn-info" type="submit" id="submitButton">
+							<i class="ace-icon fa fa-check bigger-110"></i> 保 存
+						</button>
+						&nbsp; &nbsp; &nbsp;
+						<button class="btn" type="button" id="resetBtn">
+							<i class="ace-icon fa fa-undo bigger-110"></i> 重 置
+						</button>
+						<a id="download" method="GET">
+							<button class="btn" type="button" id="resetBtn">
+								<i class="ace-icon fa fa-undo bigger-110"></i> 下载
+							</button>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right text-right" for="coopGroupId"> 
+					<span class="red">*</span> 合作协议附件组:
+					</label>
+					<div class="col-sm-6" id="fileUpload"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--#include virtual="/include_footer.html"  -->
+	<script type="text/javascript">
+		var gen_url = ctxPaths + '/generated/generatedCode.ajax';
+		var download_url = ctxPaths + "/generated/download.ajax";
+		$(function(){
+			$("#download").attr("href", download_url);
+			var add_validator = $('#add-form').validate({
+				rules : {
+					'corporateName' : {
+						required : true,
+						maxlength : 50
+					},
+					'url' : {
+						required : true,
+						maxlength : 200
+					},
+					'user' : {
+						required : true,
+						maxlength : 20
+					},
+					'entityPackage' : {
+						required : true,
+						maxlength : 100
+					},
+					'xmlPackage' : {
+						required : true,
+						maxlength : 100
+					},
+					'author' : {
+						required : true,
+						maxlength : 20
+					},
+					'driver' : {
+						required : true,
+						maxlength : 50
+					},
+					'password' : {
+						required : true,
+						maxlength : 50
+					},
+					'mapperPackage' : {
+						required : true,
+						maxlength : 100
+					}
+				},
+				submitHandler : function(form) {
+					$.ajaxSubmit(gen_url,
+						$(form).serializeJson(),
+						function(data) {
+							if (data.success == true) {
+						    	var customerInfo = data.data;
+						    	Q_Alert("操作成功", function() {
+						    		
+                              	});
+						} else {
+							Q_Alert_Fail(data.message);
+						}
+					}, $("#submitButton"));
+					return false;
+				}
+			});
+			
+			// 重置按钮
+			$('#resetBtn').on('click', function() {
+				resetForm($('#add-form'), add_validator);
+			});
+			showAttach(null);
+		});
+		function showAttach(list) {
+			var logoAttach = new PlUploaderObj('fileUpload');
+			logoAttach.init({
+				'btnName' : '选择协议文件',
+				'btnWidth' : '100px',
+				'hiddenName' : 'coopGroupId',
+				'initData' : list,
+				'max_file_size' : '5M',
+				mime_types : [ {
+					title : "*",
+					extensions : "*"
+				} ]
+			});
+		}
+	</script>
+</body>
+</html>

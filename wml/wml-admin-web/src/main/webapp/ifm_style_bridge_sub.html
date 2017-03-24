@@ -1,0 +1,11 @@
+<script>
+function  init() {
+    var iObjH = window.location.href;//访问自己的location对象获取hash值
+	var arr = iObjH.split("#");
+	
+	if (parent.parent.setPositionInIfmCallBack){
+		parent.parent.setPositionInIfmCallBack(arr[arr.length - 1]);
+	}
+}
+init();
+</script>

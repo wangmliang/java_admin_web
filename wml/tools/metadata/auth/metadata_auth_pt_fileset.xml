@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileset SYSTEM "Metadata_Auth_Fileset.dtd">
+<fileset>
+	<file name="metadata_auth_exclude_portal_admin_main.xml"/>
+	<file name="metadata_auth_exclude_auth_admin_main.xml"/>
+	<file name="metadata_auth_auth_admin_main.xml"/>
+</fileset>

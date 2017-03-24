@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<!--#include virtual="/root.jsp"  -->
+<title>staff成员信息</title>
+<!--#include virtual="/include.html"  -->
+</head>
+<body>
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<!-- PAGE CONTENT BEGINS -->
+			<form id="queryForm" onsubmit="return false;">
+				<div class="widget-box">
+					<div class="widget-header widget-header-flat search_tj_bar_tit">
+						<h5 class="widget-title">查询条件</h5>
+						<div class="widget-toolbar">
+							<a href="javascript:;" data-action="collapse"> 
+								<i class="1 ace-icon fa fa-chevron-up bigger-125"></i>
+							</a>
+						</div>
+					</div>
+					<div class="row search_tj_bar">
+						<div class="col-xs-12">
+							<div class="center">
+								<div class="row">
+									<div class="col-xs-4">
+										<span> 
+											<label class="col-xs-12 col-sm-3">客户名称：</label>
+											<div class="input-group col-xs-12 col-sm-9">
+												<input name="params['loginName']" class="form-control search-query">
+											</div>
+										</span>
+									</div>
+									<div class="col-xs-4">
+										<span> <label class="col-xs-12 col-sm-3">性别：</label>
+											<div class="input-group col-xs-12 col-sm-9">
+												<select name="params['sex']" id="partnerType" class="form-control input-sm">
+													<option value="">全部</option>
+													<option value="1">男</option>
+													<option value="2">女</option>
+												</select>
+											</div>
+										</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-4">
+										<span> 
+											<label class="col-xs-12 col-sm-3">客户名称(全局)：</label>
+											<div class="input-group col-xs-12 col-sm-9">
+												<input type="hidden"  id="staff-select" name="params['staffId']" class="form-control input-sm"/>
+											</div>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="bs_btn">
+							<button permCheck="auth_customer_manager_zc,add" id="addBtn" type="button" class="btn btn-sm btn-success">
+								<i class="ace-icon fa fa-hand-o-right bigger-120"></i> 新增
+							</button>
+							<button class="btn btn-sm" type="button" id="resetBtn">
+								<i class="ace-icon fa fa-undo bigger-110"></i> 重 置
+							</button>
+							<button id="seachBtn" type="button" class="btn btn-purple btn-sm">
+								<i class="ace-icon fa fa-search icon-on-right bigger-110"></i> 查找
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="space-6"></div>
+			<table id="grid-table" class="text-center"></table>
+			<div id="grid-pager"></div>
+			<!-- PAGE CONTENT ENDS -->
+		</div>
+	</div>
+
+	<!--#include virtual="/include_footer.html"  -->
+
+	<script type="text/javascript">
+		var list_url = ctxPaths + '/staff/query.ajax';
+		var delete_url = ctxPaths + '/staff/delete.ajax';
+		var grid_selector = "#grid-table";
+		var pager_selector = "#grid-pager";
+		
+		function initSelect2() {
+			$("#staff-select").removeClass().css("width", "220px").css("margin-left", "-40px").select2({
+				placeholder : "请输入员工名称关键字",
+				minimumInputLength : 1,
+				ajax : {
+					url : ctxPaths + '/staff/selectStaffInfoByName.ajax',
+					dataType : 'json',
+					data : function(term) {
+						return {
+							"staffName" : term
+						};
+					},
+					results : function(data) {
+						return {
+							results : $.map(data.staffList, function(item) {
+								return {
+									id : item.staffId,
+									text : item.loginName
+								}
+							})
+						};
+					}
+				}
+			});
+		}
+		
+		$(function($) {
+			initSelect2();
+			jqGrid_init($(grid_selector), pager_selector, {
+				url : list_url,
+				sortable : true,
+				sortname : 'create_date',
+				sortorder : 'desc',
+				colNames : [ '成员ID', '登录名', '组织ID', '成员姓名', '密码（经过加密）','成员状态', '性别：MALE-男性；FEMALE-女性；',
+						'电话', '手机号码', '邮箱地址', '成员创建时间', '操作' ],
+				colModel : [ {
+					name : 'staffId',
+					index : 'STAFF_ID',
+					hidden : true
+				}, {
+					name : 'loginName',
+					index : 'loginName',
+					sortable : true,
+					sortname : 'LOGIN_NAME',
+					width : 100
+				}, {
+					name : 'departmentId',
+					index : 'departmentId',
+					sortable : true,
+					sortname : 'DEPARTMENT_ID',
+					width : 100
+				}, {
+					name : 'realName',
+					index : 'realName',
+					sortable : true,
+					sortname : 'REAL_NAME',
+					width : 100
+				}, {
+					name : 'password',
+					index : 'password',
+					sortable : true,
+					sortname : 'customer_level',
+					width : 100
+				}, {
+					name : 'status',
+					index : 'status',
+					sortable : true,
+					sortname : 'status',
+					width : 100,
+					formatter : formatStatus
+				}, {
+					name : 'sex',
+					index : 'sex',
+					sortable : true,
+					sortname : 'sex',
+					width : 100,
+				}, {
+					name : 'telephone',
+					index : 'telephone',
+					sortable : true,
+					sortname : 'TELEPHONE',
+					width : 100
+				}, {
+					name : 'mobile',
+					index : 'mobile',
+					sortable : true,
+					sortname : 'mobile',
+					width : 100
+				}, {
+					name : 'email',
+					index : 'email',
+					sortable : true,
+					sortname : 'email',
+					width : 100
+				}, {
+					name : 'createDate',
+					index : 'createDate',
+					sortable : true,
+					sortname : 'create_date',
+					width : 100,
+				}, {
+					name : 'myac',
+					index : '',
+					width : 140,
+					fixed : true,
+					sortable : false,
+					resize : false,
+					formatter : actionButtons
+				} ]
+			});
+			
+			function actionButtons(cellvalue, options, rowObject) {
+				var changeStatus = 0;
+				var titleMsg = "";
+				if (rowObject['status'] == 0) {
+					changeStatus = 1;
+					titleMsg = "商用";
+				} else if (rowObject['status'] == 1) {
+					changeStatus = 2;
+					titleMsg = "暂停";
+				} else if (rowObject['status'] == 2) {
+					changeStatus = 1;
+					titleMsg = "商用";
+				}
+
+				var statusAction = '<button permCheck="auth_customer_manager_zc,changestatus" onclick=\"changeStatus('
+						+ changeStatus
+						+ ','
+						+ rowObject['customerId']
+						+ ')\" class=\"btn btn-xs btn-warning\" data-rel=\"tooltip\" title=\"'
+						+ titleMsg
+						+ '\" >'
+						+ '<i class=\"ace-icon fa fa-flag bigger-120\"></i>'
+						+ '</button>';
+
+				return '<div >'
+						+ '<button permCheck="auth_customer_manager_zc,detail" onclick=\"viewEvent('
+						+ rowObject['customerId']
+						+ ')\" class=\"btn btn-xs btn-success\" data-rel=\"tooltip\" title=\"详情\" >'
+						+ '<i class=\"ace-icon fa  fa-eye bigger-120\"></i>'
+						+ '</button>'
+						+ '<button permCheck="auth_customer_manager_zc,add" onclick=\"editEvent('
+						+ rowObject['customerId']
+						+ ')\" class=\"btn btn-xs btn-info\" data-rel=\"tooltip\" title=\"编辑\" >'
+						+ '<i class=\"ace-icon fa fa-pencil bigger-120\"></i>'
+						+ '</button>'
+						+ '<button permCheck="auth_customer_manager_zc,modifyLevel" onclick=\"modifyLevelEvent('
+						+ rowObject['customerId']
+						+ ','
+						+ rowObject['customerLevel']
+						+ ')\" class=\"btn btn-xs btn-danger\" data-rel=\"tooltip\" title=\"修改等级\" >'
+						+ '<i class=\"ace-icon fa  fa-bolt bigger-120\"></i>'
+						+ '</button>'
+						+ statusAction
+						+ '<button permCheck="auth_customer_manager_zc,delete" onclick=\"deleteEvent('
+
+						+ rowObject['customerId']
+						+ ')\" class=\"btn btn-xs btn-danger\" data-rel=\"tooltip\" title=\"删除\" >'
+						+ '<i class=\"ace-icon fa fa-trash-o bigger-120\"></i>'
+						+ '</button>' + '</div>';
+			}
+
+		});
+
+		function editEvent(id) {
+			window.location.href = ctxPaths + '/pages/customerInfo_add.shtml?customerId=' + id;
+		};
+		
+		function viewEvent(id) {
+			window.location.href = ctxPaths + '/pages/customerInfo_view.shtml?customerId=' + id;
+		};
+		
+		function deleteEvent(id) {
+			Q_Confirm("是否要删除？", function(result) {
+				if (result) {
+					$.ajaxSubmit(delete_url, {
+						'staffId' : id
+					}, function(data) {
+						if (data.success == true) {
+							$(grid_selector).jqGrid('setGridParam', {
+								page : 1
+							}).trigger("reloadGrid");
+						} else {
+							Q_Alert_Fail(data.message);
+						}
+					});
+				}
+			});
+		};
+
+		$('#addBtn').on('click', function() {
+			window.location.href = ctxPaths + '/pages/customerInfo_add.shtml';
+		});
+
+		$('#seachBtn').on('click', function() {
+			$(grid_selector).jqGrid('setGridParam', {
+				postData : $('#queryForm').serializeJson(),
+				page : 1
+			}).trigger("reloadGrid");
+		});
+		$('#resetBtn').on('click', function() {
+			$("#partner-select").select2("val", "");
+			resetForm($('#queryForm'));
+		});
+
+		function formatStatus(val) {
+			switch (val) {
+			case 0:
+				return "保存";
+				break;
+			case 1:
+				return "商用";
+				break;
+			case 2:
+				return "暂停";
+				break;
+			default:
+				break;
+			}
+		}
+	</script>
+</body>
+</html>

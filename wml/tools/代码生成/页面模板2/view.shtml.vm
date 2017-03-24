@@ -1,0 +1,100 @@
+#set($jquery="$")
+#set($_include = '#include')
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<!--$_include virtual="/root.jsp"  -->
+	<title>${entityName}</title>
+	<!--$_include virtual="/include.html"  -->
+</head>
+<body>
+	<div class="page-content">
+		<!-- 新增活动按钮 -->
+		<div class="table-responsive">
+			<div class="page-header">
+			<h1>
+				${entityName}
+				<small> <i class="ace-icon fa fa-angle-double-right"></i>
+					详情
+				</small>
+			</h1>
+		</div>
+		<form class="form-horizontal" role="form"  id="add-form" onsubmit="return false;">
+		<div class="row">
+			
+			<div class="col-xs-6">
+				
+					#foreach ($data in $fieldList)
+	 				#if ($data.bigfield != $pkName && $velocityCount % 2 == 0)
+						<div class="form-group">
+							<label class="col-sm-5 control-label no-padding-right text-right" for="$data.bigfield">
+							${data.remark}:
+							</label>
+							<div class="col-sm-7">
+								<p name="$data.bigfield" class="form-control-static"></p>
+							</div>
+						</div>
+						#end
+					#end
+					
+					
+				
+			</div>
+			<div class="col-xs-6">
+				
+					#foreach ($data in $fieldList)
+						#if ($data.bigfield != $pkName && $velocityCount % 2 == 1)
+						<div class="form-group">
+							<label class="col-sm-5 control-label no-padding-right text-right" for="$data.bigfield">
+							${data.remark}:
+							</label>
+							<div class="col-sm-7">
+								<p name="$data.bigfield" class="form-control-static"></p>
+							</div>
+						</div>
+						#end
+					#end
+					
+					
+				
+			</div>
+				
+			
+		</div>
+		<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn" type="button" onclick="javascript:history.back();">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								返 回
+							</button>
+						</div>
+			  </div>
+			</form>
+		</div>
+	</div>
+
+
+	<!--$_include virtual="/include_footer.html"  -->
+
+	<script type="text/javascript">
+	var view_url 	 = ctxPaths+ '/${entityName}/get.ajax';
+	var pkId = getP('${pkName}');
+	${jquery}(function(){
+		if (pkId){
+			${jquery}.ajaxSubmit(view_url, {'${pkName}':pkId}, function(rtn) {
+				if (rtn.success) {
+					${jquery}.dataInput(${jquery}('.form-control-static'),rtn.data);
+				} else {
+					Q_Alert_Fail(data.message); 
+				}
+			});
+		}else{
+			Q_Alert_Fail('参数错误'); 
+		}
+	})
+	
+	
+	</script>
+</body>
+</html>

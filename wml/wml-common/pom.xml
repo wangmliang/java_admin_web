@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.wang.wml</groupId>
+		<artifactId>wml</artifactId>
+		<version>1.0</version>
+	</parent>
+	<groupId>com.wang.wml.common</groupId>
+	<artifactId>wml-common</artifactId>
+	<packaging>jar</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>wml-common</name>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.aspire.webbas</groupId>
+			<artifactId>webbas-components-codedict</artifactId>
+			<version>2.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/webbas-components-codedict-2.0-SNAPSHOT.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.aspire.webbas</groupId>
+			<artifactId>webbas-components-configuration</artifactId>
+			<version>2.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/webbas-components-configuration-2.0-SNAPSHOT.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.aspire.webbas</groupId>
+			<artifactId>webbas-components-core</artifactId>
+			<version>2.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/webbas-components-core-2.0-SNAPSHOT.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.aspire.webbas</groupId>
+			<artifactId>webbas-components-attachment</artifactId>
+			<version>2.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/webbas-components-attachment-2.0-SNAPSHOT.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/servlet-api-2.5.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql.dbc</groupId>
+			<artifactId>mysqljdbc</artifactId>
+			<version>5.1.26</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/mysql-connector-java-5.1.26-bin.jar</systemPath>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE domain SYSTEM "Metadata_Auth_Desc.dtd">
+<domain id="admin">
+	<main file="metadata_auth_pt_fileset.xml"/>
+</domain>

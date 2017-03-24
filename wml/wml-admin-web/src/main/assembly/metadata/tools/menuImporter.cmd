@@ -1,0 +1,1 @@
+java -Djava.ext.dirs="lib"  -cp . com.aspire.sims.rtplt.framework.portal.util2.MenuMetadataImporter %1

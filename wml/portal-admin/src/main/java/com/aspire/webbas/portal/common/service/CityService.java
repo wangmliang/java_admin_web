@@ -1,0 +1,1 @@
+package com.aspire.webbas.portal.common.service;import com.aspire.webbas.portal.common.entity.City;import java.util.List;public abstract interface CityService {	public abstract City get(Integer paramInteger);	public abstract List<City> list(City paramCity);}
