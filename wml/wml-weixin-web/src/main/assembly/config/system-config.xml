@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- 图灵机器人apiKey -->
+	<apiKey>69aadba0446db2fdec5bcedcc43ffe7b</apiKey>
+	<!-- 微信参数 -->
+	<weixin>
+	    <token>wangml</token>
+		<appid>wx468633fa3fff7e67</appid>
+		<appSecret>e8d1ecfbebf29fcc8639d5abe9791491</appSecret>   
+	</weixin>
+</config>
