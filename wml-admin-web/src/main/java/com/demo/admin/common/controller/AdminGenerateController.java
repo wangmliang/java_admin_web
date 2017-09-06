@@ -45,7 +45,7 @@ public class AdminGenerateController extends BaseActionController {
     }
     
     /**
-     * 导出excel文件
+     * 导出excel文件a 
      * @param request
      * @param response
      * @author WML
