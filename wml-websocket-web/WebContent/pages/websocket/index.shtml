@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-siteapp,no-cache,no-store">
+	<meta http-equiv="Expires" content="0">
+	<title>聊天室</title>
+	<script>
+		var ctxPaths = "${ctx}";
+		var WEB_SOCKET_SWF_LOCATION = "../../js/sockjs/WebSocketMain.swf";
+	</script>
+	<script src="../../js/jquery-1.9.1.min.js"></script>
+	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="../../js/qqFace/jquery.qqFace.js"></script>
+	<script type="text/javascript" src="../../js/sockjs/swfobject.js"></script>
+	<script type="text/javascript" src="../../js/sockjs/web_socket.js"></script>
+	<script src="../../js/common.js"></script>
+	<style>
+	body {
+		margin-top: 5px;
+	}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">当前登录用户</h3>
+					</div>
+					<div class="panel-body">
+						<div class="list-group">
+							<a class="list-group-item">你好，666</a> <a class="list-group-item">退出</a>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-primary" id="online">
+					<div class="panel-heading">
+						<h3 class="panel-title">当前在线的其他用户</h3>
+					</div>
+					<div class="panel-body">
+						<div class="list-group" id="users"></div>
+					</div>
+				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">群发系统广播</h3>
+					</div>
+					<div class="panel-body">
+						<input type="text" class="form-control" id="msg" /><br>
+						<button id="broadcast" type="button" class="btn btn-primary">发送</button>
+						<span class="emotion">表情</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title" id="talktitle"></h3>
+					</div>
+					<div class="panel-body">
+						<div class="well" id="log-container" style="height: 400px; overflow-y: scroll"></div>
+						<textarea id="myinfo" class="form-control col-md-12" ></textarea> <br>
+						<button id="send" type="button" class="btn btn-primary">发送</button>
+						<span class="emotion">表情</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var websocket;
+		var WEB_SOCKET_DEBUG = true;
+    	$(document).ready(function() {
+       		initWebSocket();
+// 	        $.post("${ctx}/student/onlineusers", function(data){
+// 	    		for(var i=0;i<data.length;i++)
+// 	    			$("#users").append('<a href="#" onclick="talk(this)" class="list-group-item">'+data[i].userName +'</a>');
+// 	    	});
+	        
+	        $("#broadcast").click(function(){
+	        	$.post("broadcast",{"text":$("#msg").val()});
+	        });
+	        
+	        $("#send").click(function(){
+	        	$.post("${ctx}/student/getuid", {"userName":$("body").attr("to")},function(d){
+	        		var v=$("#myinfo").val();
+					if(v==""){
+						return;
+					}else{
+						if(!websocket || websocket.readyState != 1) {
+							initWebSocket();
+						}
+						var data={};
+						data["from"] = "${id}";
+						data["fromName"] = "${userName}";
+						data["to"] = d.userId;
+// 						data["text"] = replace_em(v);
+						data["text"] = QQFace.replaceImg(v);
+						websocket.send(JSON.stringify(data));
+						$("#log-container").append("<div class='bg-success'><label class='text-info'>我&nbsp;"+new Date()+"</label><div class='text-info'>"+QQFace.replaceImg(v)+"</div></div><br>");
+						ScrollToBottom('log-container');
+						$("#myinfo").val("");
+					}
+	        	});
+	        });
+	        
+	        QQFace.init('.emotion', 'myinfo');
+	    });
+    	
+    	function initWebSocket() {
+    		var l = "IE";
+    		if(window.addEventListener){ 
+    			l = "google";
+   			}
+    		// 指定websocket路径
+			websocket = new WebSocket("ws://192.168.1.170:8484/wml-websocket-web/socket/ws?id=" + l);
+	        websocket.onmessage = function(event) {
+	       		var data = JSON.parse(event.data);
+	       	 	if(data.from > 0 || data.from == -1){//用户或者群消息
+	            	// 接收服务端的实时消息并添加到HTML页面中
+	            	$("#log-container").append("<div class='bg-info'><label class='text-danger'>"+data.fromName+"&nbsp;"+data.date+"</label><div class='text-success'>"+data.text+"</div></div><br>");
+	            	$("body").attr("to", data.fromName);
+	            	// 滚动条滚动到最低部
+	            	ScrollToBottom('log-container');
+	            }else if(data.from == 0){//上线消息
+	            	if(data.text!="${userName}") {	
+	            		$("#users").append('<a href="#" onclick="talk(this)" class="list-group-item">'+data.text+'</a>');
+	            		alert(data.text+"上线了");
+	            	}
+	            }else if(data.from == -2){//下线消息
+	            	if(data.text!="${userName}"){	
+	            		$("#users > a").remove(":contains('"+data.text+"')");
+	            		alert(data.text+"下线了");
+	            	}
+	            }
+	        };
+    	}
+	    
+	   	function talk(user){
+	   		$("#talktitle").text("与" + user.innerHTML + "的聊天");
+			$("body").attr("to", user.innerHTML);
+	   	}
+</script>
+</body>
+</html>

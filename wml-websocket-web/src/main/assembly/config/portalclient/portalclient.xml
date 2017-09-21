@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portalclient>
+	<portal>
+		<!--请求的webbas内网地址-->
+		<domain>http://192.168.1.170:19000/admin/</domain>
+		<!--请求的webbas外网地址-->
+		<out-domain>http://192.168.1.170:19000/admin/</out-domain>
+		<!--授权地址，一般不需要修改-->
+		<portalservice-url>/auth</portalservice-url>
+	</portal>
+</portalclient>

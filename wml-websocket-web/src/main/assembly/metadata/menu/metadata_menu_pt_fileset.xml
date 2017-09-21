@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileset SYSTEM "Metadata_Menu_Fileset.dtd">
+<fileset>
+	<file name="metadata_menu_common_admin_all.xml"/>
+</fileset>

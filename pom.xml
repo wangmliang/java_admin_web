@@ -19,7 +19,7 @@
 		<project.deploy.directory>${env.RELEASE_HOME}</project.deploy.directory>
 	</properties>
 	
-	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�? -->
+	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�? -->
 	<repositories>
 		<repository>
 			<id>nexus-releases</id>
@@ -397,7 +397,8 @@
 		<module>wml-common</module>
 	    <module>wml-admin-web</module>
 	    <module>portal-admin</module>
-	</modules>
+    <module>wml-websocket-web</module>
+  </modules>
 	
 	<build>
 		<plugins>

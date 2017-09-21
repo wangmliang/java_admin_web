@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:websocket="http://www.springframework.org/schema/websocket"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/websocket 
+        http://www.springframework.org/schema/websocket/spring-websocket.xsd"> 
+	<description>Spring MVC Configuration</description>
+	
+	<!-- 自动注入packge配置 -->
+    <context:component-scan base-package="com.*" >   
+	    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />   
+	    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />    
+	</context:component-scan>  
+	
+	<!-- websocket配置 -->
+	<websocket:handlers>
+        <websocket:mapping path="/socket/ws" handler="myWebSocketHandler"/>
+        <websocket:handshake-interceptors>
+            <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
+    <bean id="myWebSocketHandler" class="com.wangml.websocket.MyWebSocketHandler"/>
+    
+    <!-- 全局拦截器配置 -->
+	<mvc:interceptors>  
+    	<bean class="com.wangml.interceptor.ControllerInterceptor" />
+	</mvc:interceptors>
+	
+	<!-- 自定义json转化配置 -->
+	<mvc:annotation-driven>  
+        <mvc:message-converters>  
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">  
+                <property name="objectMapper" ref="customObjectMapper"></property>  
+            </bean>  
+        </mvc:message-converters>  
+    </mvc:annotation-driven>  
+    <bean id="customObjectMapper" class="com.demo.common.model.CustomObjectMapper"></bean>
+    <!-- ========== SpringMVC自带的JSON转换工具,支持@ResponseBody注解========== -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <property name="maxUploadSize" value="10485760" />  
+    </bean>
+    
+    <!-- 引入同文件夹下的redis属性配置文件 -->
+    <import resource="redis-context.xml"/>
+   
+</beans>

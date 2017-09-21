@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE domain SYSTEM "Metadata_Auth_Main.dtd">
+<domain id="cspm-mgmt" subsystem="exclude_eump_admin">
+	<resource-category key="exclude_eump_admin" name="admin端例外资源" desc="admin端例外资源">
+		<!-- session例外资源-->
+		<resource key="exclude_eump_admin_session" name="session例外资源" desc="session例外资源" authType="UNAUTH">
+				<operation key="EXCLUDE" name="例外" desc="例外">
+				<address name="上传组件action" url="/attachment/add.ajax"/>
+				<address name="上传组件action" url="/attachment/list.ajax"/>
+				<address name="上传组件action" url="/attachment/withdraw.ajax"/>
+				<address name="上传组件列表action" url="/attachment/download.ajax"/>
+				<address name="上传组件回退action" url="/attachment/downloadMulti.ajax"/>
+				<address name="上传组件类型浏览action" url="/attachment/view.ajax"/>		
+			</operation>
+           
+		</resource>
+		<!-- 鉴权例外资源-->
+		<resource key="exclude_admin_perm" name="鉴权例外资源" desc="鉴权例外资源" authType="LOGIN_AUTH">
+			
+			<!--后台公用ACTION例外-->
+			<operation key="EXCLUDE" name="后台公用ACTION例外" desc="后台公用ACTION登录后就可访问">
+				<address name="上传组件列表action" url="/codeDict/query.ajax"/>
+			</operation>
+           
+		</resource>
+
+	</resource-category>
+</domain>
