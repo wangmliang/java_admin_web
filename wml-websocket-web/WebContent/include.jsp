@@ -1,3 +1,4 @@
+<%@page contentType="java" pageEncoding="utf-8"%>
 <!-- bootstrap & fontawesome -->
 <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="assets/css/chosen.css">
@@ -47,6 +48,6 @@ if('ontouchstart' in document.documentElement) document.write("<script src='asse
 <!--  
 
 -->
-<script src="js/select2-3.5.1/select2.min.js"></script>
-<script src="js/select2-3.5.1/select2_locale_zh-CN.js"></script>
+<script src="assets/js/select2-3.5.1/select2.min.js"></script>
+<script src="assets/js/select2-3.5.1/select2_locale_zh-CN.js"></script>
 <script src="assets/js/jquery.dataTables.min.js"></script>

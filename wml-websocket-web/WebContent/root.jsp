@@ -19,4 +19,3 @@ out.flush();
 <script>
 	window.ctxPaths = "<%= ctxPath%>";
 </script>
-<script src="<%= ctxPath%>/js/my97/WdatePicker.js"></script>
