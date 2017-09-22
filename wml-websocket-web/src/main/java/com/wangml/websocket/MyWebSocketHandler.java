@@ -79,9 +79,9 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	 * 消息传输错误处理
 	 */
 	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-		if (session.isOpen()) {
+		/*if (session.isOpen()) {
 			session.close();
-		}
+		}*/
 		Long id = (Long)session.getAttributes().get("id");
 		Iterator<Entry<Long, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 移除当前抛出异常用户的Socket会话
