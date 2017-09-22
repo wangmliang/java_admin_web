@@ -58,7 +58,7 @@ var QQFace = {
 		$(qq).qqFace({
     		id : 'facebox', 
     		assign : idText, 
-    		path : ctxPaths + '/static/js/qqFace/arclist/'	//表情存放的路径
+    		path : 'js/qqFace/arclist/'	//表情存放的路径
     	});
 	},
 	/**
