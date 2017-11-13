@@ -18,6 +18,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.wangml.util.ThreadPool;
 
 /**
  * Socket处理器
@@ -32,35 +33,47 @@ import com.google.gson.GsonBuilder;
 @Component
 public class MyWebSocketHandler implements WebSocketHandler {
 	
-	private static Logger logger = LoggerFactory.getLogger(MyWebSocketHandler.class);
+	private static Logger LOG = LoggerFactory.getLogger(MyWebSocketHandler.class);
 	
 	// 用于保存HttpSession与WebSocketSession的映射关系
-	public static final Map<Long, WebSocketSession> userSocketSessionMap;
+	public static Map<Long, WebSocketSession> userSocketSessionMap = new ConcurrentHashMap<Long, WebSocketSession>();
 	
 	/** 账户信息Service */
 //	private AccountInfoService accountInfoService;
 
-	static {
+	/* static {
 		userSocketSessionMap = new ConcurrentHashMap<Long, WebSocketSession>();
-	}
+	}*/
 
 	/**
 	 * 建立连接后,把登录用户的id写入WebSocketSession
 	 */
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-//		WebApplicationContext webContext = ContextLoaderListener.getCurrentWebApplicationContext();
-//		accountInfoService = (AccountInfoService)webContext.getBean(AccountInfoService.class);
+		/*WebApplicationContext webContext = ContextLoaderListener.getCurrentWebApplicationContext();
+		accountInfoService = (AccountInfoService)webContext.getBean(AccountInfoService.class);*/
 		
-		Long id = (Long) session.getAttributes().get("id");
-//		AccountInfo user = accountInfoService.findByPrimaryKey(uid);
-		if(null != id) {
-			if(userSocketSessionMap.get(id) == null || !userSocketSessionMap.get(id).isOpen()) {
-				userSocketSessionMap.put(id, session);
-				Message msg = new Message();
-				msg.setFrom(0L);// 0表示上线消息
-				msg.setText(id.toString());
-				this.broadcast(new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
+		Long userId = (Long)session.getAttributes().get("userId");
+		if(null != userId) {
+			if(checkAccount(userId)) {
+				LOG.debug("Socket会话已添加:用户ID" + userId);
+				userSocketSessionMap.put(userId, session);
 			}
+		}
+	}
+	
+	/**
+	 * 验证是否需要添加
+	 * @param userId
+	 * @return
+	 * @author WML
+	 * 2017年10月19日 - 下午5:38:19
+	 */
+	private boolean checkAccount(Long userId) {
+		WebSocketSession webSocket = userSocketSessionMap.get(userId);
+		if(webSocket == null) {
+			return true;
+		} else {
+			return webSocket.isOpen() ? false : true;
 		}
 	}
 
@@ -79,24 +92,14 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	 * 消息传输错误处理
 	 */
 	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-		/*if (session.isOpen()) {
-			session.close();
-		}*/
-		Long id = (Long)session.getAttributes().get("id");
+		Long userId = (Long)session.getAttributes().get("userId");
 		Iterator<Entry<Long, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 移除当前抛出异常用户的Socket会话
 		while (it.hasNext()) {
 			Entry<Long, WebSocketSession> entry = it.next();
-			if (entry.getKey().equals(id)) {
+			if (entry.getKey().equals(userId)) {
 				userSocketSessionMap.remove(entry.getKey());
-				logger.debug("Socket会话已经移除:用户ID" + entry.getKey());
-//				AccountInfo account = accountInfoService.findByPrimaryKey(entry.getKey());
-//				if(null != account) {
-					Message msg = new Message();
-					msg.setFrom(-2L);
-					msg.setText(entry.getKey().toString());
-					this.broadcast(new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
-//				}
+				LOG.debug("Socket会话已经移除:用户ID" + entry.getKey());
 				break;
 			}
 		}
@@ -106,22 +109,16 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	 * 关闭连接后
 	 */
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-		Long id = (Long)session.getAttributes().get("id");
-		logger.debug("Websocket:" + id + "已经关闭");
+//		Long id = (Long)session.getAttributes().get("userId");
+		Long userId = (Long)session.getAttributes().get("userId");
+		LOG.debug("Websocket:" + userId + "已经关闭");
 		Iterator<Entry<Long, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 移除当前用户的Socket会话
 		while (it.hasNext()) {
 			Entry<Long, WebSocketSession> entry = it.next();
-			if (entry.getKey().equals(id)) {
+			if (entry.getKey().equals(userId)) {
 				userSocketSessionMap.remove(entry.getKey());
-				logger.debug("Socket会话已经移除:用户ID" + entry.getKey());
-//				AccountInfo account = accountInfoService.findByPrimaryKey(entry.getKey());
-//				if(null != account) {
-					Message msg = new Message();
-					msg.setFrom(-2L);// 下线消息，用-2表示
-					msg.setText(entry.getKey().toString());
-					this.broadcast(new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
-//				}
+				LOG.debug("Socket会话已经移除:用户ID" + entry.getKey());
 				break;
 			}
 		}
@@ -144,19 +141,31 @@ public class MyWebSocketHandler implements WebSocketHandler {
 		while (it.hasNext()) {
 			final Entry<Long, WebSocketSession> entry = it.next();
 			if (entry.getValue().isOpen()) {
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-							if (entry.getValue().isOpen()) {
-								entry.getValue().sendMessage(message);
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}).start();
+				executeThread(entry, message);
 			}
 		}
+	}
+	
+	/**
+	 * 线程发送消息
+	 * @param entry
+	 * @param message
+	 * @author WML
+	 * 2017年10月19日 - 下午5:42:25
+	 */
+	private void executeThread(final Entry<Long, WebSocketSession> entry, final TextMessage message) {
+		ThreadPool.init().execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (entry.getValue().isOpen()) {
+						entry.getValue().sendMessage(message);
+					}
+				} catch (IOException e) {
+					LOG.error(e.getMessage(), e);
+				}
+			}
+		});
 	}
 
 	/**

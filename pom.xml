@@ -19,7 +19,7 @@
 		<project.deploy.directory>${env.RELEASE_HOME}</project.deploy.directory>
 	</properties>
 	
-	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�? -->
+	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�? -->
 	<repositories>
 		<repository>
 			<id>nexus-releases</id>
@@ -130,6 +130,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 		<!-- ibatis -->
@@ -390,6 +395,23 @@
 		    <groupId>org.springframework.data</groupId>
 		    <artifactId>spring-data-redis</artifactId>
 		    <version>1.7.1.RELEASE</version>
+		</dependency>
+		
+		<!-- Activemq -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<version>5.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-pool</artifactId>
+			<version>5.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-web</artifactId>
+			<version>5.4.2</version>
 		</dependency>
 	</dependencies>
 	

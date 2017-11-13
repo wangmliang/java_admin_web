@@ -12,6 +12,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
+
 /**
  * Socket建立连接（握手）和断开
  * <pre>
@@ -28,14 +29,14 @@ public class HandShake implements HandshakeInterceptor {
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-		logger.debug("Websocket:用户[ID:" + ((ServletServerHttpRequest) request).getServletRequest().getSession(false).getAttribute("id") + "]已经建立连接");
+		logger.debug("Websocket:用户[ID:" + ((ServletServerHttpRequest) request).getServletRequest().getSession(false).getAttribute("userId").toString() + "]已经建立连接");
 		if (request instanceof ServletServerHttpRequest) {
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
 			HttpSession session = servletRequest.getServletRequest().getSession(false);
 			// 标记用户
-			Long id = (Long) session.getAttribute("id");
-			if (id != null) {
-				attributes.put("id", id);
+			Long userId = (Long) session.getAttribute("userId");
+			if (userId != null) {
+				attributes.put("userInfo", userId);
 			} else {
 				return false;
 			}

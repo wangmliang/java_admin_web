@@ -1,0 +1,17 @@
+1、引入js文件
+	**/swfobject.js
+	**/web_socket.js
+
+2、js握手
+	/**
+	 * webscoket
+	 */
+	var websocket;
+	var WEB_SOCKET_SWF_LOCATION = ctxPaths + "/static/js/sockjs/WebSocketMain.swf";
+	var WEB_SOCKET_DEBUG = false; // webscoket 日志输出
+	websocket = new WebSocket("ws://" + url);
+    websocket.onmessage = function(event) {
+   	 	// 弹出任务完成提醒(待定)
+    	var data = JSON.parse(event.data);
+    	console.log("socket:" + event.data);
+    };

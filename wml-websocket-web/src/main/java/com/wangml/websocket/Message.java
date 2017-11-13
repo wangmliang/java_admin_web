@@ -24,6 +24,10 @@ public class Message {
 	public String text;
 	//发送日期
 	public Date date;
+	/**
+	 * 消息标识
+	 */
+	public String flag;
 
 	public Long getFrom() {
 		return from;
@@ -63,6 +67,19 @@ public class Message {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
+	@Override
+	public String toString() {
+		return "Message [from=" + from + ", fromName=" + fromName + ", to=" + to + ", text=" + text + ", date=" + date + ", flag=" + flag + "]";
 	}
 
 }

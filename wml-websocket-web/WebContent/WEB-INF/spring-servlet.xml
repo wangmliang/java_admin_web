@@ -68,6 +68,7 @@
     </bean>
     
     <!-- 引入同文件夹下的redis属性配置文件 -->
-    <import resource="redis-context.xml"/>
-   
+    <import resource="redis/redis-context.xml"/>
+    <!-- 引入同文件夹下的active_mq属性配置文件 -->
+   	<import resource="mq/activemq_config.xml"/>
 </beans>
